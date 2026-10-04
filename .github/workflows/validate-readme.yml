@@ -1,0 +1,48 @@
+name: Validate README
+
+on:
+  pull_request:
+    paths:
+      - "README.md"
+      - ".github/workflows/validate-readme.yml"
+      - ".github/workflows/update-readme.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate README markers
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          readme = Path("README.md").read_text(encoding="utf-8")
+
+          start = "<!-- AUTO-UPDATE:START -->"
+          end = "<!-- AUTO-UPDATE:END -->"
+
+          if readme.count(start) != 1:
+              raise SystemExit(
+                  "README must contain exactly one START marker."
+              )
+
+          if readme.count(end) != 1:
+              raise SystemExit(
+                  "README must contain exactly one END marker."
+              )
+
+          if readme.index(start) >= readme.index(end):
+              raise SystemExit(
+                  "README markers are in the wrong order."
+              )
+
+          print("README markers are valid.")
+          PY
