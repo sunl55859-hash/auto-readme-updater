@@ -10,7 +10,6 @@ documentation updates using GitHub Actions.
 
 ## Repository Information
 
-<!-- AUTO-UPDATE:START -->
 - **Repository:** sunl55859-hash/auto-readme-updater
 - **Description:** Automated README updates using GitHub Actions
 - **Default Branch:** main
